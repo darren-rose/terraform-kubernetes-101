@@ -1,6 +1,6 @@
 # Terraform Kubernetes 101
 
-Use Terraform to provision Kubernetes objects e.g. prods, services, etc
+Use Terraform to provision Kubernetes objects e.g. namespaces, pods, services, etc
 
 Initialise Kubernetes provider (Note: update the provider values for your cluster)
 
