@@ -4,9 +4,16 @@ provider "kubernetes" {
   username = "docker-for-desktop"
 }
 
+resource "kubernetes_namespace" "echo" {
+  metadata {
+    name = "echo"
+  }
+}
+
 resource "kubernetes_pod" "echo" {
   metadata {
     name = "echo-pod"
+    namespace = "echo"
     labels {
       App = "echo"
     }
@@ -14,7 +21,7 @@ resource "kubernetes_pod" "echo" {
   spec {
     container {
       image = "hashicorp/http-echo:0.2.1"
-      name  = "example2"
+      name  = "example-pod"
       args = ["-listen=:80", "-text='Hello World Terraform'"]
       port {
         container_port = 80
@@ -26,6 +33,7 @@ resource "kubernetes_pod" "echo" {
 resource "kubernetes_service" "echo" {
   metadata {
     name = "echo-service"
+    namespace = "echo"
   }
   spec {
     selector {
