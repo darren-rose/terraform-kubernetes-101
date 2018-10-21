@@ -6,14 +6,14 @@ provider "kubernetes" {
 
 resource "kubernetes_namespace" "echo" {
   metadata {
-    name = "echo"
+    name = "echo-ns"
   }
 }
 
 resource "kubernetes_pod" "echo" {
   metadata {
     name = "echo-pod"
-    namespace = "echo"
+    namespace = "${kubernetes_namespace.echo.metadata.0.name}"
     labels {
       App = "echo"
     }
@@ -33,7 +33,7 @@ resource "kubernetes_pod" "echo" {
 resource "kubernetes_service" "echo" {
   metadata {
     name = "echo-service"
-    namespace = "echo"
+    namespace = "${kubernetes_namespace.echo.metadata.0.name}"
   }
   spec {
     selector {
