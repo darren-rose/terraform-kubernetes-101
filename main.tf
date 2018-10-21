@@ -10,6 +10,16 @@ resource "kubernetes_namespace" "echo" {
   }
 }
 
+resource "kubernetes_config_map" "echo" {
+  metadata {
+    name = "echo-config"
+  }
+  data {
+    message = "Hello World via Terraform"
+    other = "a n other"
+  }
+}
+
 resource "kubernetes_pod" "echo" {
   metadata {
     name = "echo-pod"
@@ -22,7 +32,7 @@ resource "kubernetes_pod" "echo" {
     container {
       image = "hashicorp/http-echo:0.2.1"
       name  = "example-pod"
-      args = ["-listen=:80", "-text='Hello World Terraform'"]
+      args = ["-listen=:80", "-text='${kubernetes_config_map.echo.data.message}'"]
       port {
         container_port = 80
       }
